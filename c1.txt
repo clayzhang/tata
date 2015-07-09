@@ -1,0 +1,92 @@
+#include <stdio.h>
+#include <stdlib.h>
+typedef int elemtype;
+
+typedef struct Node            //创建结构体
+{
+	elemtype data;
+	struct Node *next;
+}Node,*LinkList;
+
+InitList(LinkList *h)                    // 初始化链表
+{
+	*h=(Node *)malloc(sizeof(Node));
+	(*h)->next=NULL;
+}
+
+void CreateFromTail(LinkList h)          //尾插法创建链表
+{
+	Node *p,*r;
+	int x,flag=1;
+	r=h;
+	printf("输入插入的数据:\n");
+	while(flag)
+	{
+		scanf("%d",&x);
+		if(x != 99999)
+		{
+			p=(Node*)malloc(sizeof(Node));
+			p->data=x;
+			r->next=p;
+			r=p;
+		}
+		else
+		{
+			flag=0;
+			r->next=NULL;
+		}
+	}
+}
+
+void Add(LinkList a,LinkList b,LinkList c)      //求a,b两个链表的交集，存到c中
+{
+	Node *p,*q,*s;
+	p=a->next;
+	q=b->next;
+	while(p != NULL && q != NULL)
+	{
+		if(p->data < q->data)
+			p=p->next;
+		else if(p->data > q->data)
+			q=q->next;
+		else if(p->data == q->data)
+		{
+			s=(Node *)malloc(sizeof(Node));
+			s->data=p->data;
+			c->next=s;
+			c=s;
+			p=p->next;
+			q=q->next;
+		}
+	}
+	c->next=NULL;
+}
+
+void Print(LinkList c)           //打印
+{
+	Node *p;
+	p=c->next;
+	while(p != NULL)
+	{
+		printf("%d ",p->data);
+		p=p->next;
+	}
+	printf("\n");
+}
+
+
+int main() //主函数
+{
+	LinkList LA,LB,C;
+	InitList(&LA);
+	InitList(&LB);
+	InitList(&C);
+	printf("请按递增插入A的数据:\n");
+	CreateFromTail(LA);
+	printf("请按递增插入B的数据:\n");
+	CreateFromTail(LB);
+	Add(LA,LB,C);
+	printf("两个链表的交集是:\n");
+	Print(C);
+	return 0;
+}
